@@ -8,8 +8,9 @@
 
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['Cidade', 'População',{ role: 'style' }],
+          ['Cidade', 'População', { role: 'style' }],
           <?php
+           // ,  {role: 'annotaion'}
 
           include 'conexao.php';
           $sql = "SELECT * FROM cidades";
@@ -20,9 +21,11 @@
             $populacao = $dados['populacao'];
          
           ?>
-          ['<?php echo $cidade ?>', <?php echo $populacao ?>,'#000'],
+          ['<?php echo $cidade ?>', <?php echo $populacao ?>, '#000'], 
        
-        <?php } ?>
+        <?php }  
+        //'#000',, < ?php echo $populacao ?
+        ?>
         ]);
 
         var view = new google.visualization.DataView(data);
