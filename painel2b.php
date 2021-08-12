@@ -7,7 +7,7 @@
 
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['hora', 'entrada', 'horta',  {role: 'annotaion'}],
+            ['hora', 'entrada', 'horta' ],
 
           <?php
 
@@ -24,24 +24,31 @@
             $horaatual = $row["horaatual"]; 
             $total=$total+$soma;
             $totalhorta=$totalhorta+$somahorta;
-            echo "[ '" . $hora . "' , " . $soma. " , " . $somahorta. ", " . $somahorta. "],"; 
+       
+            echo "[ '" . $hora . "' , " . $soma. " ,  " . $somahorta. " ],"; 
 
          } ?>
           ]);
 
-          var options = {
-          chart: {
-            title: 'Consumo de água por Hora',
-            subtitle: 'Últimas 24 horas: Entrada: <?php echo $total; ?> litros, Horta: <?php     echo number_format($totalhorta); ?> litros. (última atualização: <?php echo $horaatual; ?> )',
-            bar: {groupWidth: '95%'},
-           // vAxis: { gridlines: { count: 4 } }
-           legend: { position: 'none' }
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
 
-          }
-        };
-        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-        //chart.draw(data, google.charts.Bar.convertOptions(options));
-        chart.draw(data, options);
+      var options = {
+        title: 'Consumo de água por Hora',
+        subtitle: 'Últimas 24 horas: Entrada: <?php echo $total; ?> litros, Horta: <?php     echo number_format($totalhorta); ?> litros. (última atualização: <?php echo $horaatual; ?> )',
+
+        //width: 900,
+        height: 400,
+        bar: {groupWidth: "75%"},
+        legend: { position: "top" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_diario"));
+      chart.draw(view, options);
      }
    </script>
 
@@ -58,7 +65,7 @@ if(!$buscames) {  $buscames=date('m');  }
     function drawChart2() {
 
       var barDataultimomes = google.visualization.arrayToDataTable([
-        ['dia', 'entrada', 'horta'],
+        ['dia', 'entrada', 'hortA'],
         <?php
 
         include 'conexao/conexao.php';
@@ -86,12 +93,12 @@ if(!$buscames) {  $buscames=date('m');  }
             title: 'Consumo de água por dia do mês <?php echo $buscames; ?>',
             subtitle: 'Consumo do mês: Entrada: <?php echo $totalmes; ?> litros, Horta: <?php     echo number_format($totalhortames); ?> litros. (última atualização: <?php echo $horaatual; ?> )',
             },
-            legend: 'none',
+            legend: { position: "top" },
             width: 800,
             height: 500
               };
 
-    var chart2 = new google.charts.Bar(document.getElementById('bar_chart2'));
+        var chart2 = new google.charts.Bar(document.getElementById('bar_chart2'));
         chart2.draw(barDataultimomes, google.charts.Bar.convertOptions(barOptionsultimomes));
 
     
@@ -117,7 +124,7 @@ if(!$buscames) {  $buscames=date('m');  }
     <div class="row">
       <div class="col-md-8">
         <h4>Hidrômetro</h4>
-        <div id="columnchart_material" class="sombra"></div>
+        <div id="columnchart_diario" class="sombra"></div>
       </div>
    </div>
    <div class="row">
